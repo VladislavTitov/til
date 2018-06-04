@@ -1,0 +1,18 @@
+{% extends 'base_template.html' %}
+
+{% block title %}
+    <title>Api Keys</title>
+{% endblock %}
+
+{% block content %}
+    {% if apikeys %}
+        {% for apikey in apikeys %}
+            <p><a href="{{ apikey.get_absolute_url }}">{{ apikey.name }} ({{ apikey.pk }})</a></p>
+        {% endfor %}
+    {% else %}
+        <p>You don't have any api key!</p>
+    {% endif %}
+
+    <a href="{% url 'apikey-create' %}">Wanna one more api key?</a>
+
+{% endblock %}

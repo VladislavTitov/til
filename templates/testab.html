@@ -1,0 +1,15 @@
+{% extends 'base_template.html' %}
+
+{% block title %}
+    <title>Test AB</title>
+{% endblock %}
+
+{% block content %}
+    {% if tests %}
+        {% for test in tests %}
+            <p><a href="{{ test.get_absolute_url }}">{{ test.category }}</a></p>
+        {% endfor %}
+    {% else %}
+        <p>You haven't tested any application!</p>
+    {% endif %}
+{% endblock %}
