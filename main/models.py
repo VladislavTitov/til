@@ -66,6 +66,9 @@ class Video(models.Model):
     finish_time = models.DateTimeField()
     test = models.ForeignKey(TestAB, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ('number',)
+
     def __str__(self):
         return self.name
 

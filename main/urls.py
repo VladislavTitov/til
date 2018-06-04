@@ -9,7 +9,7 @@ urlpatterns = [
 
 urlpatterns += [
     path('login', auth_views.login, {'template_name': 'login.html'}, name='login'),
-    path('logout', auth_views.logout, name='logout'),
+    path('logout', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
     path('registration', reg, name="registration")
 ]
 
@@ -18,8 +18,9 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('apikey', ApiKeyCreateView.as_view(), name='apikey-create'),
-    path('test/<uuid:pk>', test, name='api-key-details'),
-    path('testab/<int:pk>', testab, name='test-details'),
-    path('video/<int:pk>', video, name='testab-details'),
+    path('apikeys', ApiKeyCreateView.as_view(), name='apikey-create'),
+    path('apikey/<uuid:pk>', test, name='api-key-details'),
+    path('test/<int:pk>', testab, name='test-details'),
+    path('testab/<int:pk>', video, name='testab-details'),
+    path('video/<int:pk>', video_details, name='video-details')
 ]

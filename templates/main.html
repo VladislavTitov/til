@@ -7,7 +7,7 @@
 {% block content %}
     {% if apikeys %}
         {% for apikey in apikeys %}
-            <p><a href="{{ apikey.get_absolute_url }}">{{ apikey.name }} ({{ apikey.pk }})</a></p>
+            <p><a href="{{ apikey.get_absolute_url }}">{{ apikey.name }}</a> ({{ apikey.pk }})</p>
         {% endfor %}
     {% else %}
         <p>You don't have any api key!</p>

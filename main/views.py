@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import *
 from .forms import MyUserCreationForm, MyAuthForm
@@ -12,6 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
+import json
 
 
 # Create your views here.
@@ -62,6 +63,23 @@ def testab(request, pk):
 def video(request, pk):
     videos = Video.objects.filter(test__pk=pk)
     return render(request, 'videos.html', context={'videos': videos})
+
+
+def video_details(request, pk):
+    found_video = get_object_or_404(Video, pk=pk)
+    track = json.loads(found_video.track)
+    labels = []
+    probability = []
+    for item in track:
+        for key, value in item.items():
+            labels.append(key)
+            probability.append(float(value))
+    start = 0
+    interval = found_video.finish_time.timestamp() - found_video.start_time.timestamp()
+    delta = interval / len(labels)
+    times = [round(start + i * delta, 3) for i in range(len(labels))]
+
+    return render(request, 'video.html', context={'video': found_video, 'labels': labels, 'times': times})
 
 
 class ApiKeyCreateView(LoginRequiredMixin, CreateView):
