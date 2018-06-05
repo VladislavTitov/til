@@ -61,20 +61,33 @@ def testab(request, pk):
     return render(request, 'testab.html', context={'tests': tests})
 
 
-def video(request, pk):
+def videos_view(request, pk):
     videos = Video.objects.filter(test__pk=pk)
-    return render(request, 'videos.html', context={'videos': videos})
+    emotions_str = get_video_emotions(videos)
+
+    return render(request, 'videos.html', context={'videos': videos, 'emotions': emotions_str})
+
+
+def get_video_emotions(videos):
+    common_labels = []
+    for video in videos:
+        labels, probs = parse_track(video.track)
+        common_labels += labels
+    all_caps = len(common_labels)
+    label_count = {}
+    for label in common_labels:
+        if label not in label_count:
+            label_count[label] = 1
+        else:
+            label_count[label] = label_count[label] + 1
+    emotions_str = ['{} - {}'.format(k, round(label_count[k] * 100 / all_caps, 2)) for k in
+                    sorted(label_count, key=label_count.get, reverse=True)]
+    return emotions_str
 
 
 def video_details(request, pk):
     found_video = get_object_or_404(Video, pk=pk)
-    track = json.loads(found_video.track)
-    labels = []
-    probability = []
-    for item in track:
-        for key, value in item.items():
-            labels.append(key)
-            probability.append(float(value))
+    labels, probability = parse_track(found_video.track)
 
     if len(labels) < 1:
         return render(request, 'video.html', context={'video': found_video, 'is_empty': True})
@@ -85,6 +98,17 @@ def video_details(request, pk):
     times = [round(start + i * delta, 3) for i in range(len(labels))]
 
     return render(request, 'video.html', context={'video': found_video, 'labels': labels, 'times': times})
+
+
+def parse_track(trackstr):
+    track = json.loads(trackstr)
+    labels = []
+    probability = []
+    for item in track:
+        for key, value in item.items():
+            labels.append(key)
+            probability.append(float(value))
+    return labels, probability
 
 
 def video_file(request, pk):

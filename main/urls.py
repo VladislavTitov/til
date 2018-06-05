@@ -21,7 +21,7 @@ urlpatterns += [
     path('apikeys', ApiKeyCreateView.as_view(), name='apikey-create'),
     path('apikey/<uuid:pk>', test, name='api-key-details'),
     path('test/<int:pk>', testab, name='test-details'),
-    path('testab/<int:pk>', video, name='testab-details'),
+    path('testab/<int:pk>', videos_view, name='testab-details'),
     path('video/<int:pk>', video_details, name='video-details')
 ]
 
