@@ -74,6 +74,10 @@ def video_details(request, pk):
         for key, value in item.items():
             labels.append(key)
             probability.append(float(value))
+
+    if len(labels) < 1:
+        return render(request, 'video.html', context={'video': found_video, 'is_empty': True})
+
     start = 0
     interval = found_video.finish_time.timestamp() - found_video.start_time.timestamp()
     delta = interval / len(labels)

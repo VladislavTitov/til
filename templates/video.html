@@ -7,63 +7,68 @@
 {% block content %}
     <h1>{{ video.name }}</h1>
 
-    <canvas id="myChart" width="100%" height="80%" class="chartjs-render-monitor"></canvas>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    <script>
+    {% if not is_empty %}
+        <canvas id="myChart" width="100%" height="80%" class="chartjs-render-monitor"></canvas>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+        <script>
 
-        var data = [{% if labels %}{% for label in labels %}'{{ label }}', {% endfor %}{% endif %}];
+            var data = [{% if labels %}{% for label in labels %}'{{ label }}', {% endfor %}{% endif %}];
 
-        var dates = [{% if times %}{% for time in times %}'{{ time }}', {% endfor %}{% endif %}];
+            var dates = [{% if times %}{% for time in times %}'{{ time }}', {% endfor %}{% endif %}];
 
-        {% comment %}dates = dates.map(value => new Date(value * 1000));{% endcomment %}
+            {% comment %}dates = dates.map(value => new Date(value * 1000));{% endcomment %}
 
-        var ctx = document.getElementById('myChart').getContext('2d');
-		var chart = new Chart(ctx, {
-			type: 'line',
-			data: {
-				xLabels: dates,
-				yLabels: ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral'],
-				datasets: [{
-					label: 'Emotions changing',
-					data: data,
-					fill: false,
-					borderColor: ['red'],
-					backgroundColor: ['red']
-				}]
-			},
-			options: {
-				responsive: true,
-				title: {
-					display: false
-				},
-				scales: {
-					xAxes: [{
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Time'
-						},
-                        {% comment %}type: 'time',
-                        distribution: 'series',
-                        ticks: {
-						    source: 'xLabels'
-                        }{% endcomment %}
-					}],
-					yAxes: [{
-						type: 'category',
-						position: 'left',
-						display: true,
-						scaleLabel: {
-							display: true,
-							labelString: 'Emotions'
-						},
-						ticks: {
-							reverse: true
-						}
-					}]
-				}
-			}
-		});
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    xLabels: dates,
+                    yLabels: ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral'],
+                    datasets: [{
+                        label: 'Emotions changing',
+                        data: data,
+                        fill: false,
+                        borderColor: ['red'],
+                        backgroundColor: ['red']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: false
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time'
+                            },
+                            {% comment %}type: 'time',
+                            distribution: 'series',
+                            ticks: {
+                                source: 'xLabels'
+                            }{% endcomment %}
+                        }],
+                        yAxes: [{
+                            type: 'category',
+                            position: 'left',
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Emotions'
+                            },
+                            ticks: {
+                                reverse: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+    {% else %}
 
-    </script>
+        <p>We couldn't recognize your face :( (or it wasn't in camera)!</p>
+
+    {% endif %}
 {% endblock %}
