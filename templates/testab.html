@@ -6,9 +6,26 @@
 
 {% block content %}
     {% if tests %}
+        <h2>All test categories</h2>
         {% for test in tests %}
             <p><a href="{{ test.get_absolute_url }}">{{ test.category }}</a></p>
         {% endfor %}
+
+        {% if emotions %}
+            <h2>Test emotions comparing</h2>
+            {% for emotion in emotions %}
+                <h3>{{ emotion.test }}</h3>
+                {% if emotion.emotions %}
+                    {% for em in emotion.emotions %}
+                        <p>{{ em }}%</p>
+                    {% endfor %}
+                {% else %}
+                    <p>Don't recognized</p>
+                {% endif %}
+            {% endfor %}
+
+        {% endif %}
+
     {% else %}
         <p>You haven't tested any application!</p>
     {% endif %}

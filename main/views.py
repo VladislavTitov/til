@@ -51,16 +51,29 @@ def main(request):
     return render(request, 'main.html', context={'apikeys': apikeys})
 
 
+@login_required(login_url='/main/login')
 def test(request, pk):
     tests = Test.objects.filter(api_key__pk=pk)
     return render(request, 'test.html', context={'tests': tests})
 
 
+class TestWithEmotions:
+
+    def __init__(self, test, emotions):
+        self.test = test
+        self.emotions = emotions
+
+
+@login_required(login_url='/main/login')
 def testab(request, pk):
     tests = TestAB.objects.filter(test__pk=pk)
-    return render(request, 'testab.html', context={'tests': tests})
+
+    emotions = [TestWithEmotions(test_.category, get_video_emotions(test_.video_set.all())) for test_ in tests]
+
+    return render(request, 'testab.html', context={'tests': tests, 'emotions': emotions})
 
 
+@login_required(login_url='/main/login')
 def videos_view(request, pk):
     videos = Video.objects.filter(test__pk=pk)
     emotions_str = get_video_emotions(videos)
@@ -87,6 +100,7 @@ def get_video_emotions(videos):
     return emotions_str
 
 
+@login_required(login_url='/main/login')
 def video_details(request, pk):
     found_video = get_object_or_404(Video, pk=pk)
     labels, probability = parse_track(found_video.track)
@@ -113,6 +127,7 @@ def parse_track(trackstr):
     return labels, probability
 
 
+@login_required(login_url='/main/login')
 def video_file(request, pk):
     found_video = get_object_or_404(Video, pk=pk)
     file = FileWrapper(open(found_video.video.path, 'rb'))
