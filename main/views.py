@@ -117,13 +117,14 @@ def video_details(request, pk):
 
 
 def parse_track(trackstr):
-    track = json.loads(trackstr)
     labels = []
     probability = []
-    for item in track:
-        for key, value in item.items():
-            labels.append(key)
-            probability.append(float(value))
+    if trackstr is not '':
+        track = json.loads(trackstr)
+        for item in track:
+            for key, value in item.items():
+                labels.append(key)
+                probability.append(float(value))
     return labels, probability
 
 
