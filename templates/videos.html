@@ -5,8 +5,8 @@
 {% endblock %}
 
 {% block content %}
+    <h2>All videos</h2>
     {% if videos %}
-        <h2>All videos</h2>
         {% for video in videos %}
             <p><a href="{% if video.is_processed %}{{ video.get_absolute_url }}{% endif %}">{{ video.name }}</a> {% if not video.is_processed %}Processing...{% endif %}</p>
         {% endfor %}
