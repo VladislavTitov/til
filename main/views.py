@@ -74,6 +74,8 @@ def get_video_emotions(videos):
         labels, probs = parse_track(video.track)
         common_labels += labels
     all_caps = len(common_labels)
+    if all_caps < 1:
+        return None
     label_count = {}
     for label in common_labels:
         if label not in label_count:
