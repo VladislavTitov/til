@@ -24,3 +24,7 @@ urlpatterns += [
     path('testab/<int:pk>', video, name='testab-details'),
     path('video/<int:pk>', video_details, name='video-details')
 ]
+
+urlpatterns += [
+    path('video/<int:pk>/file', video_file, name='video-file')
+]

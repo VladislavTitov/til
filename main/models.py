@@ -75,6 +75,9 @@ class Video(models.Model):
     def get_absolute_url(self):
         return reverse('video-details', args=[str(self.id)])
 
+    def get_file_url(self):
+        return reverse('video-file', args=[str(self.id)])
+
 
 from .tasks import process_video
 

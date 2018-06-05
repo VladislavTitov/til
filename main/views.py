@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
 import json
+from wsgiref.util import FileWrapper
 
 
 # Create your views here.
@@ -84,6 +85,14 @@ def video_details(request, pk):
     times = [round(start + i * delta, 3) for i in range(len(labels))]
 
     return render(request, 'video.html', context={'video': found_video, 'labels': labels, 'times': times})
+
+
+def video_file(request, pk):
+    found_video = get_object_or_404(Video, pk=pk)
+    file = FileWrapper(open(found_video.video.path, 'rb'))
+    response = HttpResponse(file, content_type='video/mp4')
+    response['Content-Disposition'] = 'attachment; filename={}'.format(found_video.name)
+    return response
 
 
 class ApiKeyCreateView(LoginRequiredMixin, CreateView):
